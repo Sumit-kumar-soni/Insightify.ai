@@ -1,0 +1,40 @@
+# ==========================================
+# AutoData AI - .gitignore
+# ==========================================
+
+# 1. Environment Variables & Secrets (CRITICAL)
+.env
+.env.local
+.env.*
+
+# 2. Datasets & Uploads (Prevents uploading massive files to GitHub)
+*.csv
+*.xlsx
+*.xls
+*.json
+*.parquet
+*.db
+*.sqlite3
+
+# 3. Python Cache & Compiled Files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# 4. Virtual Environments (Do not upload your installed packages!)
+venv/
+env/
+.venv/
+.env/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# 5. OS & Editor generated files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# 6. Streamlit specific
+.streamlit/secrets.toml

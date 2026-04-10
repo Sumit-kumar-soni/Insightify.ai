@@ -34,8 +34,7 @@ def load_file(file_obj):
                 df = pd.read_csv(file_obj, sep=None, engine='python')
                 
     elif filename.endswith('.xlsx'):
-        file_obj.seek(0)
-        df = pd.read_excel(file_obj, engine='openpyxl')
+        df = pd.read_excel(file_obj)
         
     elif filename.endswith('.json'):
         df = pd.read_json(file_obj)

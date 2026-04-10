@@ -1,6 +1,7 @@
 import pandas as pd
 import dask.dataframe as dd
 import os
+import io
 
 def load_file(file_obj):
     # Get file size
@@ -34,7 +35,9 @@ def load_file(file_obj):
                 df = pd.read_csv(file_obj, sep=None, engine='python')
                 
     elif filename.endswith('.xlsx'):
-        df = pd.read_excel(file_obj)
+        file_obj.seek(0)
+        pure_bytes = io.BytesIO(file_obj.getvalue())
+        df = pd.read_excel(pure_bytes, engine='openpyxl')
         
     elif filename.endswith('.json'):
         df = pd.read_json(file_obj)

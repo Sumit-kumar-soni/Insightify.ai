@@ -5,4 +5,4 @@ plotly==5.19.0
 scikit-learn==1.4.1.post1
 openpyxl==3.1.2
 python-dotenv==1.0.1
-# openai==1.14.2  # Uncomment when you are ready to plug in real AI
+google-generativeai==0.5.2

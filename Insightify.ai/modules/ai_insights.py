@@ -1,10 +1,19 @@
 import pandas as pd
 import os
+import google.generativeai as genai
 
 def generate_summary(df):
-    api_key = os.getenv("OPENAI_API_KEY")
+    # 1. Fetch the API key securely from .env
+    api_key = os.getenv("GEMINI_API_KEY")
     
-    # Create a statistical summary string to pass to the LLM
+    # Fallback if the key is missing
+    if not api_key or api_key == "your_actual_api_key_goes_here":
+        return "⚠️ **Error:** GEMINI_API_KEY not found. Please add your real key to the .env file."
+        
+    # 2. Configure the Gemini client
+    genai.configure(api_key=api_key)
+    
+    # 3. Prepare the data summary
     stats = df.describe().to_string()
     data_types = df.dtypes.to_string()
     
@@ -20,18 +29,14 @@ def generate_summary(df):
     Format your response in plain English using bullet points. Focus on what the numbers mean, not just repeating them.
     """
     
-    # --- PROTOTYPE MOCK RESPONSE ---
-    # Once you install the openai library, replace this return with the actual API call.
-    if api_key == "your_openai_api_key_here" or not api_key:
-         return """
-         *(Mock Insights - Please add your OpenAI API Key to .env to enable real AI generation)*
-         * **Outlier Detected:** The maximum value in your dataset is significantly higher than the 75th percentile, indicating potential anomalies or high-value targets.
-         * **Data Skew:** Several numerical features show a strong right-skew, suggesting that a small percentage of rows account for the majority of the total value.
-         * **Recommendation:** Group your categorical data by the highest performing numerical metric to identify your most valuable segments.
-         """
-    else:
-        # Pseudo-code for real implementation:
-        # client = OpenAI(api_key=api_key)
-        # response = client.chat.completions.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": prompt}])
-        # return response.choices[0].message.content
-        pass
+    try:
+        # 4. Call the Gemini API
+        # Using gemini-1.5-flash as it is highly efficient for fast text/data reasoning
+        model = genai.GenerativeModel('gemini-2.5-flash')
+        response = model.generate_content(prompt)
+        
+        return response.text
+        
+    except Exception as e:
+        # Catch any API errors (like rate limits or invalid keys) so the app doesn't crash
+        return f"❌ **An error occurred with the AI:** {str(e)}"
